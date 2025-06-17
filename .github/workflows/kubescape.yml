@@ -1,4 +1,4 @@
-name: Kubescape
+name: Kubescape Scan
 
 on:
   push:
@@ -10,11 +10,13 @@ jobs:
   nsa-security-check:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Install Kubescape
-        run: curl -s https://raw.githubusercontent.com/armosec/kubescape/master/install.sh | /bin/bash
+        run: |
+          curl -s https://raw.githubusercontent.com/kubescape/kubescape/master/install.sh | /bin/bash
+          echo "$HOME/.kubescape" >> $GITHUB_PATH
 
-      - name: Scan YAML files
+      - name: Run Kubescape NSA Scan
         run: kubescape scan framework nsa *.yaml
